@@ -1,3 +1,7 @@
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class KNeighboursClassifier {
 
     private int n_neighbours;
@@ -44,8 +48,46 @@ public class KNeighboursClassifier {
     }
 
     public void predict(int[][] X_test) {
-
+        int[] predictions = new int[X_test.length];
     }
+
+    private double calucalteDistance(double[] testSample, double[] trainSample, Metrics metric) {
+        double distance = 0.0;
+        switch (metric) {
+            case EUCLIDEAN -> {
+                for (int i = 0; i < testSample.length; i++) {
+                    distance += Math.pow(testSample[i] - trainSample[i], 2);
+                }
+                return Math.sqrt(distance);
+            }
+            case MANHATTAN -> {
+                for (int i = 0; i < testSample.length; i++) {
+                    distance += Math.abs(testSample[i] - trainSample[i]);
+                }
+                return distance;
+            }
+            default -> {
+                throw new IllegalArgumentException("Nieznana metryka") // Musiałem użyć throw, bez tego, default musiało by coś zwracać, żeby nie było błędu
+            }
+        }
+    }
+
+    private int getMostCommonLabel(List<Integer> labels) {
+        Map<Integer, Integer> labelCount = new HashMap<>(); // Kluczem jest etykieta, a wartością jej liczba wystąpień
+        for (int label : labels) {
+            labelCount.put(label, labelCount.getOrDefault(label, 0) + 1);
+        }
+        // getOrDeafult sprawdza czy etykieta jest w już w mapie, jeśli nie ma to ustawia na 0 i dodaje 1, jeśli jest to wtedy ta wartość + 1 (liczba wystąpień)
+
+        int mostCommon = labels.get(0); // Zaczynamy od pierwszej etykiety
+        for (Map.Entry<Integer, Integer> entry : labelCount.entrySet()) {
+            if (entry.getValue() > labelCount.get(mostCommon)) {
+                mostCommon = entry.getKey();
+            }
+        }
+        return mostCommon;
+    }
+
 
 
 //    private int calculate_accuracy(int[][] X_test, int[] Y_test) {

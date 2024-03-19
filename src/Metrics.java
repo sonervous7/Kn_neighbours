@@ -1,4 +1,4 @@
 public enum Metrics {
-    MANHATAN,
-    EUQLIDIAN
+    MANHATTAN,
+    EUCLIDEAN
 }
