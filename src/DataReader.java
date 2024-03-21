@@ -59,45 +59,63 @@ public class DataReader {
     W poniższej metodzie korzystam z opakowanego typu Integer (wrapperClass)
      */
 
-public static ArrayList<Integer> readLabels(String filepath) {
-    Scanner scanner = null;
-    try {
-        scanner = new Scanner(new File(filepath));
-    } catch (FileNotFoundException e) {
-        throw new RuntimeException(e);
-    }
-    ArrayList<Integer> labelList = new ArrayList<>();
+    public static ArrayList<Integer> readLabels(String filepath) {
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new File(filepath));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        ArrayList<Integer> labelList = new ArrayList<>();
 
-    if (scanner.hasNextLine()) {
-        scanner.nextLine();
-    }
+        if (scanner.hasNextLine()) {
+            scanner.nextLine();
+        }
 
 
-    if (filepath.equals("test_data_cancer.txt") || filepath.equals("train_data_cancer.txt")) {
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            String[] parts = line.split(";");
-            try {
-                Integer label = Integer.parseInt(parts[1]);
-                labelList.add(label);
-            } catch (NumberFormatException e) {
-                System.err.println("Błąd podczas konwersji na liczbe INT (plik Cancer).");
+        if (filepath.equals("test_data_cancer.txt") || filepath.equals("train_data_cancer.txt")) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(";");
+                try {
+                    Integer label = Integer.parseInt(parts[1]);
+                    labelList.add(label);
+                } catch (NumberFormatException e) {
+                    System.err.println("Błąd podczas konwersji na liczbe INT (plik Cancer).");
+                }
+            }
+        } else {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(";");
+                try {
+                    Integer label = Integer.parseInt(parts[parts.length - 1]);
+                    labelList.add(label);
+                } catch (NumberFormatException e) {
+                    System.err.println("Błąd podczas konwersji na liczbę INT (plik Iris) " + parts[parts.length - 1]);
+                }
             }
         }
-    } else {
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            String[] parts = line.split(";");
-            try {
-                Integer label = Integer.parseInt(parts[parts.length - 1]);
-                labelList.add(label);
-            } catch (NumberFormatException e) {
-                System.err.println("Błąd podczas konwersji na liczbę INT (plik Iris) " + parts[parts.length - 1]);
-            }
-        }
+        scanner.close();
+        return labelList;
     }
-    scanner.close();
-    return labelList;
+
+    public static double[][] doubleListToDoubleArr(ArrayList<double[]> arrayList) {
+        double[][] arr = new double[arrayList.size()][];
+        for (int i = 0; i < arrayList.size(); i++) {
+            arr[i] = arrayList.get(i);
+        }
+
+        return arr;
+    }
+
+    public static int[] intListToIntArr(ArrayList<Integer> arrayList) {
+        int[] arr = new int[arrayList.size()];
+        for (int i = 0; i < arrayList.size(); i++) {
+            arr[i] = arrayList.get(i); // Automatyczne rozpakowanie Integer do int
+        }
+        return arr;
+    }
+
 }
-    }
 
