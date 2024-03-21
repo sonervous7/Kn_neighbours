@@ -1,4 +1,3 @@
-import javax.imageio.IIOException;
 import java.io.FileWriter;
 import java.io.IOException;
 
