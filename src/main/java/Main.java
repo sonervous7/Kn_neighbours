@@ -22,7 +22,7 @@ public class Main {
 
         DataWriter.clearFile("saved_results.txt");
 
-        if (filePathTrain == "train_data_cancer.txt" ) {
+        if (filePathTrain.equals("train_data_cancer.txt")) {
             System.out.println("ZESTAW DANYCH: CANCER");
             DataWriter.saveResults("saved_results.txt", "ZESTAW DANYCH: CANCER");
         } else {
