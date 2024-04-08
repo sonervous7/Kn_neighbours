@@ -1,4 +1,5 @@
 import java.util.*;
+import org.javatuples.Pair;
 
 
 public class KNeighborsClassifier {
@@ -37,21 +38,21 @@ public class KNeighborsClassifier {
         int[] predictions = new int[X_test.length]; // Tablica na przewidywane efekty
 
         for (int i = 0; i < X_test.length; i++) {
-            List<Pair> distances = new ArrayList<>();
+            List<Pair<Integer, Double>> distances = new ArrayList<>();
 
 
             // Obliczanie odległości od wszystkich próbek treningowych
-            for (int j = 0; j < X_train.length; j++) {
-                double distance = calucalteDistance(X_test[i], X_train[j], metric);
-                distances.add(new Pair(j, distance));
+            for (int index = 0; index < X_train.length; index++) {
+                double distance = calucalteDistance(X_test[i], X_train[index], metric);
+                distances.add(new Pair<>(index, distance));
             }
             // Sortowanie listy odległośći ASCENDING
-            distances.sort(Comparator.comparing(Pair::getValue));
+            distances.sort(Comparator.comparing(Pair::getValue1));
 
             // Wybieranie k-najbliższych sąsiadów dla danej próbki testowej
             List<Integer> nearestLabels = new ArrayList<>();
             for (int k = 0; k < n_neighbors; k++) {
-                int indexOfNearest = distances.get(k).getKey(); // get aby otrzymać z listy distances k-ty element, klucz z pary
+                int indexOfNearest = distances.get(k).getValue0(); // get aby otrzymać z listy distances k-ty element, klucz z pary
                 nearestLabels.add(Y_train[indexOfNearest]);
             }
 
@@ -111,7 +112,7 @@ public class KNeighborsClassifier {
         }
         // getOrDeafult sprawdza czy etykieta jest w już w mapie, jeśli nie ma to ustawia na 0 i dodaje 1, jeśli jest to wtedy ta wartość + 1 (liczba wystąpień)
 
-        int mostCommon = labels.get(0); // Zaczynamy od pierwszej etykiety
+        int mostCommon = labels.getFirst(); // Zaczynamy od pierwszej etykiety
         for (Map.Entry<Integer, Integer> entry : labelCount.entrySet()) {
             if (entry.getValue() > labelCount.get(mostCommon)) { //mostCommon jest kluczem, więc użycie get(mostCommon) spowoduje dostanie wartości pod tym kluczem
                 mostCommon = entry.getKey();
